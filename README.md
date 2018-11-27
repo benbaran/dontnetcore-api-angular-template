@@ -53,3 +53,10 @@ dotnet add package NewtonSoft.Json
 ```
 
 dotnet add package Dapper
+
+## Creating the Angular Application
+npm install -g @angular/cli@latest
+
+cd C:\Git\dontnetcore-api-angular-template
+
+ng new template --routing --directory web

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Core.Person
 {
@@ -17,5 +18,6 @@ namespace Core.Person
 
         // I like to return a result from Delete, make void if you don't
         bool Delete(Person person);
+        Person Read(Guid id);
     }
 }

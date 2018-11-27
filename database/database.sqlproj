@@ -74,5 +74,6 @@
     <Build Include="Security\READWRITE_LOGIN.sql" />
     <Build Include="Security\RoleMemberships.sql" />
     <Build Include="Security\Permissions.sql" />
+    <Build Include="dbo\Tables\Person.sql" />
   </ItemGroup>
 </Project>

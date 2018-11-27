@@ -1,43 +1,58 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Core.Person;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
 namespace web.Controllers
 {
-    [Authorize]
-    [Route("api/[controller]")]
+
+
+    // I like my API paths to be all lowercase, feel free to use the default though
+    //[Route("api/[controller]")]
+
+    //[Authorize]
+    [Route("api/person")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class PersonController : ControllerBase
     {
         // Add an ILogger for dependancy injection
-        private ILogger<ValuesController> _logger;
+        private ILogger<PersonController> _logger;
+        private IPersonService _service;
 
         // Add a constructor for dependancy injection
-        public ValuesController(ILogger<ValuesController> logger)
+        public PersonController(ILogger<PersonController> logger, IPersonService service)
         {
             _logger = logger;
+            _service = service;
         }
 
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public ActionResult<IEnumerable<Person>> Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(_service.FindAll());
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public ActionResult<Person> Get(Guid id)
         {
-            return "value";
+            return _service.Read(id);
         }
 
-        // POST api/values
-        [HttpPost]
+    // GET api/patient/search/{term}
+    [HttpGet("search/{term}")]
+    public ActionResult<Person> Search(string term)
+    {
+      return Ok(_service.Find(term));
+    }
+
+    // POST api/values
+    [HttpPost]
         public void Post([FromBody] string value)
         {
             // For more information on protecting this API from Cross Site Request Forgery (CSRF) attacks, see https://go.microsoft.com/fwlink/?LinkID=717803

@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -13,11 +14,12 @@ namespace Core.Person
         private static string _connectionString;
         private static ILogger _logger;
 
-        // Contructor to inject connection string and logger from parent
-        public PersonService(string connectionString, ILogger logger) { 
-        
-                _connectionString = connectionString;
-                _logger = logger;
+        // Contructor to inject configuration and logger from parent
+        public PersonService(IConfiguration configuration, ILogger<PersonService> logger) {
+
+            _connectionString = configuration.GetConnectionString("CONNECTIONSTRING");
+
+            _logger = logger;
         }
 
         public Person Create(Person person)
@@ -44,6 +46,28 @@ namespace Core.Person
             }
         }
 
+        public Person Read(Guid id)
+        {
+            try
+            {
+                using (var connection = CreateConnection(_connectionString))
+                {
+
+                    var result = connection.QuerySingle<Person>("SELECT * FROM Person WHERE PersonId = @Id");
+
+                    _logger.LogInformation("{0} -> {1}: Person read {2}.", this.GetType().Name, MethodBase.GetCurrentMethod().Name, id);
+
+                    return result;
+                }
+            }
+            catch (Exception exception)
+            {
+                _logger.LogCritical("{0} -> {1}: {2}", GetType().Name, MethodBase.GetCurrentMethod().Name, exception.Message);
+
+                throw;
+            }
+        }
+
         public bool Delete(Person person)
         {
             try
@@ -52,7 +76,7 @@ namespace Core.Person
                 {
                     connection.Query("DELETE FROM Person WHERE PersonId = @PersonId", person);
 
-                    _logger.LogInformation("{0} -> {1}: Person with PersonId = {2} deleted.", this.GetType().Name, MethodBase.GetCurrentMethod().Name, person.PersonId);
+                    _logger.LogInformation("{0} -> {1}: Person with PersonId = {2} deleted.", GetType().Name, MethodBase.GetCurrentMethod().Name, person.PersonId);
 
                     return true;
                 }
@@ -71,11 +95,10 @@ namespace Core.Person
             {
                 using (var connection = CreateConnection(_connectionString))
                 {
-                    
-                        
+                       
                     var result = connection.Query<Person>("SELECT * FROM Person").ToList();
 
-                    _logger.LogInformation("{0} -> {1}: People listed.", this.GetType().Name, MethodBase.GetCurrentMethod().Name, person.PersonId);
+                    _logger.LogInformation("{0} -> {1}: People listed.", GetType().Name, MethodBase.GetCurrentMethod().Name);
 
                     return result;
                 }
@@ -94,9 +117,9 @@ namespace Core.Person
             {
                 using (var connection = CreateConnection(_connectionString))
                 {
-                    var result = connection.Query<Person>("SELECT * FROM Person WHERE LastName LIKE @Term", new { Term = term }).ToList();
+                    var result = connection.Query<Person>("SELECT * FROM Person WHERE LastName LIKE @Term", new { Term = "%" + term + "%" }).ToList();
 
-                    _logger.LogInformation("{0} -> {1}: People searched with term {2}, {3} results returned.", this.GetType().Name, MethodBase.GetCurrentMethod().Name, person.PersonId);
+                    _logger.LogInformation("{0} -> {1}: People searched with term {2}, {3} results returned.", this.GetType().Name, MethodBase.GetCurrentMethod().Name, term, result.Count);
 
                     return result;
                 }
