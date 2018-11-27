@@ -2,7 +2,7 @@
   <input [formControl]="autoCompleteControl" type="text" matInput [matAutocomplete]="auto">
     <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
        <mat-option *ngFor="let person of autoComplete$ | async; let index = index" [value]="person.firstName">
-        {{person.firstName}} {{person.lastName}}
+        <a routerLink="/person/{{person.personId}}">{{person.firstName}} {{person.lastName}}</a>
     </mat-option>
   </mat-autocomplete>
 </mat-form-field>
