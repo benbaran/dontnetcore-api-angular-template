@@ -47,6 +47,15 @@ namespace web
                 app.UseHsts();
             }
 
+            // Add CORS to allow API access from different domains
+            app.UseCors(c =>
+            {
+                c.AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowAnyOrigin()
+                .AllowCredentials();
+            });
+
             app.UseHttpsRedirection();
 
             app.UseAuthentication();
