@@ -1,0 +1,3 @@
+﻿CREATE LOGIN [READWRITE]
+    WITH PASSWORD = N'lqgs|rjnjasec nu8p7{rz+kmsFT7_&#$!~<wt0mzn|clont', SID = 0x098822B25A631E498C6A63E295AB485F, DEFAULT_LANGUAGE = [us_english];
+

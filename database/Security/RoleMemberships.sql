@@ -1,0 +1,10 @@
+﻿ALTER ROLE [db_datareader] ADD MEMBER [READONLY];
+
+
+GO
+ALTER ROLE [db_datareader] ADD MEMBER [READWRITE];
+
+
+GO
+ALTER ROLE [db_datawriter] ADD MEMBER [READWRITE];
+

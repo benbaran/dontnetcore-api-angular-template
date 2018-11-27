@@ -1,0 +1,3 @@
+﻿CREATE LOGIN [READONLY]
+    WITH PASSWORD = N'lpqgOsn|mmrjmnjase!cnu.KmsFT7_&#$!~<p{rzk,kwstmz', SID = 0xA76C99D07EF38D47BB120AAD3CD80BEE, DEFAULT_LANGUAGE = [us_english];
+

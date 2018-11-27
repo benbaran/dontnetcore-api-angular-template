@@ -1,0 +1,23 @@
+﻿CREATE TABLE [dbo].[Logs] (
+    [ID]              INT            IDENTITY (1, 1) NOT NULL,
+    [MESSAGE]         NVARCHAR (MAX) NULL,
+    [MESSAGETEMPLATE] NVARCHAR (MAX) NULL,
+    [LEVEL]           NVARCHAR (128) NULL,
+    [TIMESTAMP]       DATETIME       NOT NULL,
+    [EXCEPTION]       NVARCHAR (MAX) NULL,
+    [PROPERTIES]      NVARCHAR (MAX) NULL,
+    CONSTRAINT [PK_LOGS] PRIMARY KEY CLUSTERED ([ID] ASC)
+);
+
+
+GO
+GRANT INSERT
+    ON OBJECT::[dbo].[Logs] TO [SERILOGWRITER]
+    AS [dbo];
+
+
+GO
+GRANT SELECT
+    ON OBJECT::[dbo].[Logs] TO [SERILOGWRITER]
+    AS [dbo];
+

@@ -32,3 +32,22 @@ https://code-maze.com/net-core-web-development-part2/
 https://code-maze.com/net-core-web-development-part3/
 https://code-maze.com/net-core-web-development-part4/
 
+EntityBase
+
+All items will have an Id and DateTimeCreated property, this will be inhe=rited from the EntityBase class. Additionally, overiding the ToString() fungtion to return a JSON formatted string makes reading test results easier.
+
+dotnet add package NewtonSoft.Json
+
+```c#
+    public class EntityBase
+    {
+        public Guid Id { get; set; }
+
+        public DateTime CreateDateTime { get; set; }
+
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this, Formatting.Indented);
+        }
+    }
+```
