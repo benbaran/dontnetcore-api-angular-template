@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 
 namespace web.Controllers
 {
@@ -12,6 +13,15 @@ namespace web.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
+        // Add an ILogger for dependancy injection
+        private ILogger<ValuesController> _logger;
+
+        // Add a constructor for dependancy injection
+        public ValuesController(ILogger<ValuesController> logger)
+        {
+            _logger = logger;
+        }
+
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
