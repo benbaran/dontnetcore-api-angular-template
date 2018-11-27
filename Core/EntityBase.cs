@@ -5,8 +5,6 @@ namespace Core
 {
     public class EntityBase
     {
-        public Guid Id { get; set; }
-
         public DateTime CreateDateTime { get; set; }
 
         public override string ToString()

@@ -7,7 +7,7 @@ namespace Core.Person
     {
         IEnumerable<Person> FindAll();
 
-        IEnumerable<Person> FindByCondition();
+        IEnumerable<Person> Find(string term);
 
         // I like to return a result from Create, make void if you don't
         Person Create(Person person);

@@ -51,3 +51,5 @@ dotnet add package NewtonSoft.Json
         }
     }
 ```
+
+dotnet add package Dapper
