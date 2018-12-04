@@ -1,26 +1,107 @@
+## Create Initial Projects
+
+Core        - .NET Core Class Library
+API         - .NET Core Web Api
+Test        - .Net Core MSTest
+Database    - Database Project
+
+## Add Swagger for API Documentation
+
+1. Add the NuGet Package
 
 dotnet add package Swashbuckle.AspNetCore
 
+2. Setup in Startup.cs ConfigureServices
+
+```c#
 services.AddMvc();
 
 services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
 });
+```
 
+3. Setup in Startup.cs Configure
+```c#
 app.UseSwagger();
 
 app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "My API V1");
 });
+```
 
+4. Add Serilog for Console and SQL Logging
+
+```
 dotnet add package Serilog.AspNetCore
 dotnet add package Serilog.Settings.Configuration
 dotnet add package Serilog.Sinks.Console
 dotnet add package Serilog.Sinks.MssqlServer
+```
 
-Configure CORS
+5. Delete Logging sections from Appsettings.json and Appsettings.development.json
+
+6. Add Serilog Configuration to Appsettings.json
+
+```json
+"Serilog": {
+    "MinimumLevel": "Information",
+    "WriteTo": [
+      {
+        "Name": "MSSqlServer",
+        "Args": {
+          "connectionString": "Server=127.0.0.1;Database=Data;User Id=SERILOG;Password=password123;",
+          "tableName": "Logs",
+          "autoCreateSqlTable": false
+        }
+      },
+      {
+        "Name": "Console",
+        "Args": {}
+      }
+    ]
+```
+7. Create SQL Table for Serilog (column names are case sensitive)
+
+```sql
+
+CREATE LOGIN [SERILOG] WITH PASSWORD = N'password', DEFAULT_LANGUAGE = [us_english];
+
+
+CREATE TABLE [dbo].[Logs] (
+    [ID]              INT            IDENTITY (1, 1) NOT NULL,
+    [MESSAGE]         NVARCHAR (MAX) NULL,
+    [MESSAGETEMPLATE] NVARCHAR (MAX) NULL,
+    [LEVEL]           NVARCHAR (128) NULL,
+    [TIMESTAMP]       DATETIME       NOT NULL,
+    [EXCEPTION]       NVARCHAR (MAX) NULL,
+    [PROPERTIES]      NVARCHAR (MAX) NULL,
+    CONSTRAINT [PK_LOGS] PRIMARY KEY CLUSTERED ([ID] ASC)
+);
+
+
+CREATE USER [SERILOG] FOR LOGIN [SERILOG];
+
+GO
+GRANT INSERT
+    ON OBJECT::[dbo].[Logs] TO [SERILOG]
+    AS [dbo];
+
+
+GO
+GRANT SELECT
+    ON OBJECT::[dbo].[Logs] TO [SERILOG]
+    AS [dbo];
+    
+```
+
+8. Configure CORS in Startup.cs Configure
+
+```c#
+app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
+```
 
 https://github.com/domaindrivendev/Swashbuckle.AspNetCore
 
