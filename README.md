@@ -101,21 +101,62 @@ GRANT SELECT
     
 ```
 
-8. Configure CORS in Startup.cs Configure
+8. Add Serilog to Program.cs
+```c#
+    public class Program
+    {
+        // Get the appsettings.json for the current project
+        public static IConfiguration Configuration { get; } = new ConfigurationBuilder()
+                    .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                    .AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production"}.json", optional: true)
+                    .Build();
+
+        public static void Main(string[] args)
+        {
+            // Create the logger from the appsettings.json
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom
+                .Configuration(Configuration)
+                .CreateLogger();
+
+            try
+            {
+                Log.Information("Starting host.");
+
+                CreateWebHostBuilder(args).Build().Run();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Error starting host.");
+            }
+            finally
+            {
+                Log.Information("Shutting down host.");
+
+                Log.CloseAndFlush();
+            }
+
+            
+        }
+
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
+            .UseSerilog()
+            .UseStartup<Startup>();
+    }
+}
+```
+9. Configure CORS in Startup.cs Configure
 
 ```c#
 app.UseCors(c => c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 ```
+10. Add Dapper ORM to Core Project
 
-https://github.com/domaindrivendev/Swashbuckle.AspNetCore
-
-https://github.com/serilog/
-http://hamidmosalla.com/2018/02/15/asp-net-core-2-logging-with-serilog-and-microsoft-sql-server-sink/
-
-https://code-maze.com/net-core-web-development-part1/
-https://code-maze.com/net-core-web-development-part2/
-https://code-maze.com/net-core-web-development-part3/
-https://code-maze.com/net-core-web-development-part4/
+```
+dotnet add package Dapper
+```
 
 EntityBase
 
@@ -137,7 +178,7 @@ dotnet add package NewtonSoft.Json
     }
 ```
 
-dotnet add package Dapper
+
 
 ## Creating the Angular Application
 npm install -g @angular/cli@latest
@@ -145,3 +186,12 @@ npm install -g @angular/cli@latest
 cd C:\Git\dontnetcore-api-angular-template
 
 ng new template --routing --directory web
+
+###References
+1. https://github.com/domaindrivendev/Swashbuckle.AspNetCore
+2. https://github.com/serilog/
+3. http://hamidmosalla.com/2018/02/15/asp-net-core-2-logging-with-serilog-and-microsoft-sql-server-sink/
+4. https://code-maze.com/net-core-web-development-part1/
+5.  https://code-maze.com/net-core-web-development-part2/
+6. https://code-maze.com/net-core-web-development-part3/
+7. https://code-maze.com/net-core-web-development-part4/
