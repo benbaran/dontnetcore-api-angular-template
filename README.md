@@ -9,7 +9,9 @@ Database    - Database Project
 
 1. Add the NuGet Package
 
+```
 dotnet add package Swashbuckle.AspNetCore
+```
 
 2. Setup in Startup.cs ConfigureServices
 
@@ -67,18 +69,20 @@ dotnet add package Serilog.Sinks.MssqlServer
 
 ```sql
 
-CREATE LOGIN [SERILOG] WITH PASSWORD = N'password', DEFAULT_LANGUAGE = [us_english];
+CREATE LOGIN [SERILOG] WITH PASSWORD = N'password123*', DEFAULT_LANGUAGE = [us_english];
 
 
-CREATE TABLE [dbo].[Logs] (
-    [ID]              INT            IDENTITY (1, 1) NOT NULL,
-    [MESSAGE]         NVARCHAR (MAX) NULL,
-    [MESSAGETEMPLATE] NVARCHAR (MAX) NULL,
-    [LEVEL]           NVARCHAR (128) NULL,
-    [TIMESTAMP]       DATETIME       NOT NULL,
-    [EXCEPTION]       NVARCHAR (MAX) NULL,
-    [PROPERTIES]      NVARCHAR (MAX) NULL,
-    CONSTRAINT [PK_LOGS] PRIMARY KEY CLUSTERED ([ID] ASC)
+CREATE TABLE [Logs] (
+
+   [Id] int IDENTITY(1,1) NOT NULL,
+   [Message] nvarchar(max) NULL,
+   [MessageTemplate] nvarchar(max) NULL,
+   [Level] nvarchar(128) NULL,
+   [TimeStamp] datetime NOT NULL,
+   [Exception] nvarchar(max) NULL,
+   [Properties] nvarchar(max) NULL
+
+   CONSTRAINT [PK_Logs] PRIMARY KEY CLUSTERED ([Id] ASC) 
 );
 
 
