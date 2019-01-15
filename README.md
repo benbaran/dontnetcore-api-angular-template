@@ -69,8 +69,7 @@ dotnet add package Serilog.Sinks.MssqlServer
 
 ```sql
 
-CREATE LOGIN [SERILOG] WITH PASSWORD = N'password123*', DEFAULT_LANGUAGE = [us_english];
-
+CREATE LOGIN [SERILOG] WITH PASSWORD = N'password123!', DEFAULT_LANGUAGE = [us_english];
 
 CREATE TABLE [Logs] (
 
