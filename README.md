@@ -54,7 +54,7 @@ dotnet add package Serilog.Sinks.MssqlServer
       {
         "Name": "MSSqlServer",
         "Args": {
-          "connectionString": "Server=127.0.0.1;Database=Data;User Id=SERILOG;Password=password123;",
+          "connectionString": "Server=127.0.0.1;Database=Data;User Id=SERILOG;Password=password123!;",
           "tableName": "Logs",
           "autoCreateSqlTable": false
         }
